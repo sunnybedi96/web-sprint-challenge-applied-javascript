@@ -1,22 +1,27 @@
-axios
-  .get("https://lambda-times-backend.herokuapp.com/topics")
-  .then((response) => {
-    response.data.topics.forEach((item) => {
-      divTopics.appendChild(tabs(item));
-    });
-
-    console.log(response.data);
+const Tabs = (topics) => {
+  const topicDiv = document.createElement('div');
+  topicDiv.classList.add('topics')
+  topics.forEach(item => {
+    const tabs = document.createElement('div')
+    tabs.textContent = item
+    tabs.classList.add('tab')
+    topicDiv.appendChild(tabs)
   })
-  .catch((err) => {
-    console.log(err);
-  });
+  return topicDiv
 
-function tabs(obj) {
-  const divTab = document.createElement("div");
-  divTab.classList.add("tab");
-  divTab.textContent = obj;
-
-  return divTab;
+}
+const tabsAppender = (selector) => {
+  axios.get(`http://localhost:5000/api/topics`).then(res => {
+    console.log(res)
+    const tabHolder = document.querySelector(selector);
+    const topic = res.data.topics;
+    const newTab = Tabs(topic);
+    tabHolder.appendChild(newTab)
+  })
+  .catch(err => {
+    console.error(err)
+  })
+  .finally(()=> console.log)
 }
 
-const divTopics = document.querySelector("div.topics");
+export { Tabs, tabsAppender }

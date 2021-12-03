@@ -1,29 +1,34 @@
 
-function Header() {
-  // creating the variables for this component
-  const div = document.createElement("div");
-  const span = document.createElement("span");
-  const h1 = document.createElement("h1");
-  const span2 = document.createElement("span");
+const Header = (title, date, temp) => {
+  const headerDiv = document.createElement('div');
+  const spanDate = document.createElement('span');
+  const heading1 = document.createElement('h1');
+  const span2 = document.createElement('span');
 
-  // giving them classes
-  div.classList.add("header");
-  span.classList.add("date");
-  span2.classList.add("temp");
 
-  //passing in data
-  span.textContent = "Smarch 28, 2019";
-  h1.textContent = "Lambda Times";
-  span2.textContent = "98°";
+  headerDiv.classList.add('header');
+  spanDate.classList.add('date');
+  span2.classList.add('temp');
 
-  //appending them
-  div.appendChild(span);
-  div.appendChild(h1);
-  div.appendChild(span2);
+  headerDiv.appendChild(spanDate);
+  headerDiv.appendChild(heading1);
+  headerDiv.appendChild(span2);
 
-  return div;
+  heading1.textContent = title;
+  spanDate.textContent = date;
+  span2.textContent = temp;
+
+return headerDiv
+
+}
+const headerAppender = (selector) => {
+  const selectorDate = document.querySelector(selector);
+  selectorDate.appendChild(Header(
+    'Lambda Times', 'December 3, 2021', '32°F'
+  ))
+
+
 }
 
-const headerContainer = document.querySelector("div.header-container");
 
-headerContainer.appendChild(Header());
+export { Header, headerAppender }

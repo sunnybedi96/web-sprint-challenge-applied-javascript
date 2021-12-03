@@ -1,41 +1,58 @@
-const cardContainer = document.querySelector("div.cards-container");
+const Card = (article) => {
+  const divCard = document.createElement('div');
+  const headlineSection = document.createElement('div');
+  const author = document.createElement('div');
+  const divImg = document.createElement('div');
+  const img = document.createElement('img');
+  const spanName = document.createElement('span');
 
-axios
-  .get("https://lambda-times-backend.herokuapp.com/articles")
-  .then((response) => {
-    let articleCard = response.data.articles;
-    console.log(articleCard);
-    Object.entries(articleCard).forEach((articleloop) => {
-      console.log(articleloop[1]);
-      articleloop[1].forEach((articles) =>
-        cardContainer.appendChild(articleMaker(articles))
-      );
-    });
+  divCard.classList.add('card');
+  headlineSection.classList.add('headline');
+  author.classList.add('author');
+  divImg.classList.add('img-container')
+
+  headlineSection.textContent = article.headline;
+  img.src = article.authorPhoto;
+  spanName.textContent = `By ${article.authorName}`;
+
+  divCard.appendChild(headlineSection);
+  divCard.appendChild(author);
+  author.appendChild(divImg);
+  divImg.appendChild(img);
+  author.appendChild(spanName);
+
+  divCard.addEventListener('click', () => {
+    console.log(article.headline);
   })
-  .catch((err) => {
-    console.log(err);
-  });
-
-function articleMaker(article) {
-  const card = document.createElement("div");
-  const headLine = document.createElement("div");
-  const author = document.createElement("div");
-  const imgContainer = document.createElement("div");
-  const image = document.createElement("img");
-  const authorName = document.createElement("span");
-
-  card.classList.add("card");
-  headLine.classList.add("headline");
-  author.classList.add("author");
-  imgContainer.classList.add("img-container");
-
-  card.append(headLine, author);
-  author.append(imgContainer, authorName);
-  imgContainer.appendChild(image);
-
-  headLine.textContent = article.headline;
-  authorName.textContent = article.authorName;
-  image.src = article.authorPhoto;
-
-  return card;
+  return divCard
 }
+const cardAppender = (selector) => {
+  const selected = document.querySelector(selector)
+  axios.get('http://localhost:5000/api/articles').then(resp => {
+  const bootstrap = resp.data.articles.bootstrap
+  bootstrap.forEach(elem => {
+    selected.appendChild(Card(elem))
+  })
+  const javascript = resp.data.articles.javascript
+  javascript.forEach(elem => {
+    selected.appendChild(Card(elem))
+  })
+  const technology = resp.data.articles.technology
+  technology.forEach(elem => {
+    selected.appendChild(Card(elem))
+  })
+  const jquery = resp.data.articles.jquery
+  jquery.forEach(elem => {
+    selected.appendChild(Card(elem))
+  })
+  const node = resp.data.articles.node
+  node.forEach(elem => {
+    selected.appendChild(Card(elem))
+  })
+})
+.catch(err => {
+  console.error(err)
+})
+}
+
+export { Card, cardAppender }
